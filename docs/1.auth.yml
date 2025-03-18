@@ -1,0 +1,140 @@
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: 
+paths:                
+  /auth/login:
+    post:
+      tags:
+        - Auth Routes
+      summary: User login
+      description: Authenticate a user and return an access token.
+      operationId: loginUser
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  format: email
+                  example: "benandoh1996@gmail.com"
+                  description: "User's registered email"
+                password:
+                  type: string
+                  format: password
+                  example: "123456789"
+                  description: "User's password"
+              required:
+                - email
+                - password
+      responses:
+        "200":
+          description: Successful login
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Login successful"
+                  accessToken:
+                    type: string
+                    example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+                  refreshToken:
+                    type: string
+                    example: "dGhpcyBpcyBhIHNhbXBsZSByZWZyZXNoIHRva2Vu..."
+        "400":
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Please input email and password"
+        "401":
+          description: Invalid credentials
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Invalid email or password"
+  /auth/profile/{email}:
+    get:
+      tags:
+        - Auth Routes
+      security:
+        - bearerAuth: []
+      summary: Get user profile by email
+      description: Retrieve a user's profile information using their email address.
+      operationId: getUserProfile
+      parameters:
+        - name: email
+          in: path
+          required: true
+          description: User's registered email address
+          schema:
+            type: string
+            format: email
+            example: "benandoh1996@gmail.com"
+      responses:
+        "200":
+          description: Successfully retrieved user profile
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  email:
+                    type: string
+                    example: "benandoh1996@gmail.com"
+                  name:
+                    type: string
+                    example: "Ben Andoh"
+                  role:
+                    type: string
+                    example: "user"
+                  createdAt:
+                    type: string
+                    format: date-time
+                    example: "2024-03-16T12:00:00.000Z"
+        "400":
+          description: Invalid email format
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Invalid email format"
+        "404":
+          description: User not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "User not found"
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Internal Server Error"

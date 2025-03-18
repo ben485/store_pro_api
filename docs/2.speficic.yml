@@ -1,0 +1,153 @@
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+paths:
+  /specifics/sales:
+    get:
+      tags:
+        - Specific Queries
+      security:
+        - bearerAuth: []
+      summary: Get total sales
+      description: Retrieve the total sales data.
+      operationId: getTotalSales
+      responses:
+        "200":
+          description: Successfully retrieved total sales data
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  totalSales:
+                    type: number
+                    example: 25000.50
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Unauthorized access"
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Internal Server Error"
+
+  /specifics/inventories:
+    get:
+      tags:
+        - Specific Queries
+      security:
+        - bearerAuth: []
+      summary: Get inventory details
+      description: Retrieve a list of all inventories.
+      operationId: getInventories
+      responses:
+        "200":
+          description: Successfully retrieved inventories
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: string
+                      example: "inv123"
+                    name:
+                      type: string
+                      example: "Laptop"
+                    quantity:
+                      type: integer
+                      example: 50
+                    price:
+                      type: number
+                      example: 1200.99
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Unauthorized access"
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Internal Server Error"
+
+  /specifics/staffs:
+    get:
+      tags:
+        - Specific Queries
+      security:
+        - bearerAuth: []
+      summary: Get staff details
+      description: Retrieve a list of all staff members.
+      operationId: getStaff
+      responses:
+        "200":
+          description: Successfully retrieved staff members
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: string
+                      example: "staff123"
+                    name:
+                      type: string
+                      example: "John Doe"
+                    position:
+                      type: string
+                      example: "Manager"
+                    email:
+                      type: string
+                      format: email
+                      example: "johndoe@example.com"
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Unauthorized access"
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Internal Server Error"

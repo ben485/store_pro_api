@@ -1,0 +1,272 @@
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+paths:
+  /products/all-items/{storeID}:
+    get:
+      tags:
+        - Products
+      security:
+        - bearerAuth: []
+      summary: Get all items in a store
+      description: Retrieve all products available in a specific store.
+      operationId: getAllItems
+      parameters:
+        - name: storeID
+          in: path
+          required: true
+          description: The unique ID of the store
+          schema:
+            type: string
+            example: "store123"
+      responses:
+        "200":
+          description: Successfully retrieved all items
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: string
+                      example: "prod123"
+                    name:
+                      type: string
+                      example: "Laptop"
+                    quantity:
+                      type: integer
+                      example: 10
+                    price:
+                      type: number
+                      example: 999.99
+        "404":
+          description: Store not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Store not found"
+        "500":
+          description: Internal server error
+
+  /products/quantity/{storeID}:
+    patch:
+      tags:
+        - Products
+      security:
+        - bearerAuth: []
+      summary: Update product quantity
+      description: Modify the quantity of a product in a specific store.
+      operationId: productQuantity
+      parameters:
+        - name: storeID
+          in: path
+          required: true
+          description: The unique ID of the store
+          schema:
+            type: string
+            example: "store123"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                Drug_Reff:
+                  type: string
+                  example: "prod123"
+                Vender_Reff:
+                  type: string
+                  example: "prod123"
+                quantity:
+                  type: integer
+                  example: 20
+      responses:
+        "200":
+          description: Product quantity updated successfully
+        "400":
+          description: Invalid request data
+        "404":
+          description: Store or product not found
+        "500":
+          description: Internal server error
+
+  /products/price/{storeID}:
+    patch:
+      tags:
+        - Products
+      security:
+        - bearerAuth: []
+      summary: Update product price
+      description: Modify the price of a product in a specific store.
+      operationId: productPrice
+      parameters:
+        - name: storeID
+          in: path
+          required: true
+          description: The unique ID of the store
+          schema:
+            type: string
+            example: "store123"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                Drug_Reff:
+                  type: string
+                  example: "prod123"
+                Vender_Reff:
+                  type: string
+                  example: "prod123"
+                cost_price:
+                  type: number
+                  example: 1200.50
+                selling_price:
+                  type: number
+                  example: 1200.50
+                wholesale_price:
+                  type: number
+                  example: 1200.50
+      responses:
+        "200":
+          description: Product price updated successfully
+        "400":
+          description: Invalid request data
+        "404":
+          description: Store or product not found
+        "500":
+          description: Internal server error
+
+  /products/items/{storeID}:
+    delete:
+      tags:
+        - Products
+      security:
+        - bearerAuth: []
+      summary: Delete a product
+      description: Remove a product from a specific store.
+      operationId: deleteProduct
+      parameters:
+        - name: storeID
+          in: path
+          required: true
+          description: The unique ID of the store
+          schema:
+            type: string
+            example: "store123"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                Drug_Reff:
+                  type: string
+                  example: "prod123"
+                Vender_Reff:
+                  type: string
+                  example: "prod123"
+      responses:
+        "200":
+          description: Product deleted successfully
+        "404":
+          description: Store or product not found
+        "500":
+          description: Internal server error
+
+  /products/outofstocks-items/{storeID}:
+    get:
+      tags:
+        - Products
+      security:
+        - bearerAuth: []
+      summary: Get out-of-stock products
+      description: Retrieve a list of products that are out of stock in a specific store.
+      operationId: outOfStocksProducts
+      parameters:
+        - name: storeID
+          in: path
+          required: true
+          description: The unique ID of the store
+          schema:
+            type: string
+            example: "store123"
+      responses:
+        "200":
+          description: Successfully retrieved out-of-stock items
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: string
+                      example: "prod123"
+                    name:
+                      type: string
+                      example: "Mouse"
+                    quantity:
+                      type: integer
+                      example: 0
+        "404":
+          description: Store not found
+        "500":
+          description: Internal server error
+
+  /products/expiry-items/{storeID}:
+    get:
+      tags:
+        - Products
+      security:
+        - bearerAuth: []
+      summary: Get expired products
+      description: Retrieve a list of products that have expired in a specific store.
+      operationId: getExpiryProducts
+      parameters:
+        - name: storeID
+          in: path
+          required: true
+          description: The unique ID of the store
+          schema:
+            type: string
+            example: "store123"
+      responses:
+        "200":
+          description: Successfully retrieved expired items
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: string
+                      example: "prod123"
+                    name:
+                      type: string
+                      example: "Milk"
+                    expiryDate:
+                      type: string
+                      format: date
+                      example: "2024-03-10"
+        "404":
+          description: Store not found
+        "500":
+          description: Internal server error
