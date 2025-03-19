@@ -9,7 +9,7 @@ const helperFunction = require('../helpers/transformers/product.helper')
 const getAllItems = async(req, res, next) => {
     try {
 
-        if(req.params.storeID.trim()){
+        if(!req.params.storeID.trim()){
             throw new CustomError(400, 'StoreID is not provided !!');
         }
 
