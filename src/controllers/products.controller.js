@@ -17,8 +17,9 @@ const getAllItems = async(req, res, next) => {
 
         const items = await productServices.allProducts(storeID);
   
-        const transformedItems = helperFunction.sanitizeProductData(items);
+        const transformedItems = items.map(data => helperFunction.sanitizeProductData(data));
 
+        
         const response = new SuccessResponse(200, 'success', transformedItems);
         return response.sendResponse(res)
 
@@ -108,7 +109,7 @@ const outOfStocksProducts = async(req, res, next) => {
 
         const items = await productServices.outofStockProducts(storeID);
 
-        const transformedItems = helperFunction.sanitizeProductData(items);
+        const transformedItems = items.map(data => helperFunction.sanitizeProductData(data));
 
         const response = new SuccessResponse(200, 'success', transformedItems);
         return response.sendResponse(res)
@@ -129,7 +130,7 @@ const getExpiryProducts = async(req, res, next) => {
 
         const items = await productServices.expiryProducts(storeID);
 
-        const transformedItems = helperFunction.sanitizeProductData(items);
+        const transformedItems = items.map(data => helperFunction.sanitizeProductData(data));
 
         const response = new SuccessResponse(200, 'success', transformedItems);
         return response.sendResponse(res)
