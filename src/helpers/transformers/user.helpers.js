@@ -11,6 +11,7 @@ const sanitizeStaffData = (storeData, token) => {
         location: storeData.Location || '',
         username: storeData.Username || '',
         name: storeData.Name || '',
+        storeID: storeData.Publick_Key,
         token
     };
 };
@@ -28,6 +29,7 @@ const sanitizeProfileData = (storeData) => {
         location: storeData.Location || '',
         username: storeData.Username || '',
         name: storeData.Name || '',
+        storeID: storeData.Publick_Key,
     };
 };
 
