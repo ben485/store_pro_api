@@ -15,7 +15,8 @@ const sanitizeProductData = (storeData) => {
         out_of_stock_limit: storeData.outofstocklimit || '',
         expiry_date : storeData.Expiry_Date || '',
         Drug_Reff: storeData.Drug_Reff,
-        Vendor_Reff: storeData.Vendor_Reff
+        Vendor_Reff: storeData.Vendor_Reff,
+        storeID : storeData.Publick_Key
     };
 };
 
