@@ -1,6 +1,8 @@
 const CustomError = require('../classUtils/customErrorClass');
 const pool = require('../config/database.config');
 
+const helperFunction = require('../helpers/transformers/user.helpers')
+
 const totalSale = async (String_Date) => {
     try {
         let sumsql = `SELECT COALESCE(SUM(Amount_Due), 0) AS TotalSale FROM bulksales WHERE String_Date = ?`;
@@ -54,9 +56,19 @@ const staffs = async () => {
 
         const [users] = await pool.query(userSql, [])
 
+        let staffs ;
+
+       
+        if(users.length === 0){
+          staffs = []
+        }
+  
+        staffs = users.map(data => helperFunction.sanitizeProfileData(data));
+
+
         const data = {
             staffNumbers: usersNumber[0].Total || 0,
-            staffs: users,
+            staffs: staffs,
         }
 
         return data

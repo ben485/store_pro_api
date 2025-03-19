@@ -36,9 +36,7 @@ const getStaff = async(req, res, next) => {
     try {
         const staffData = await specificQueriesService.staffs();
 
-        const staffs = helperFunction.sanitizeProfileData(staffData)
-
-        const response = new SuccessResponse(200, 'success', staffs);
+        const response = new SuccessResponse(200, 'success', staffData);
         return response.sendResponse(res)
     } catch (error) {
         next(error)  

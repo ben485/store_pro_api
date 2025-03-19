@@ -5,7 +5,7 @@ const allProducts = async (Publick_Key) => {
     try {
         const sql = `SELECT * FROM retaildrugs WHERE Publick_Key = ?`
 
-        const items = await pool.query(sql, [Publick_Key]);
+        const [items] = await pool.query(sql, [Publick_Key]);
 
         return items
     } catch (error) {

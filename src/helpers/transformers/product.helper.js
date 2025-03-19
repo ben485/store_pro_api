@@ -1,6 +1,7 @@
 
 
 const sanitizeProductData = (storeData) => {
+    console.log(storeData)
     if (!storeData) return null;
 
     return {

@@ -16,10 +16,14 @@ const getAllItems = async(req, res, next) => {
         const storeID = (req.params.storeID).trim()
 
         const items = await productServices.allProducts(storeID);
+
+        if(items.length === 0){
+            const response = new SuccessResponse(200, 'success', []);
+            return response.sendResponse(res) 
+        }
   
         const transformedItems = items.map(data => helperFunction.sanitizeProductData(data));
 
-        
         const response = new SuccessResponse(200, 'success', transformedItems);
         return response.sendResponse(res)
 
