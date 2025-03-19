@@ -58,7 +58,7 @@ const options = {
     },
     servers: [
       {
-        url: 'http://localhost:4000',
+        url: 'https://storeproapi.onrender.com',
         description: 'Live Server'
       },
 
