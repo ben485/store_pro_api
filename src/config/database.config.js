@@ -1,13 +1,14 @@
 const mysql = require('mysql2/promise');
 
 const pool = mysql.createPool({
-    host: 'sql5.freesqldatabase.com',
-    user: 'sql5767533',
-    password: 'x96L7a5PtD',
-    database: 'sql5767533',
+    host: 'pharmacysystem.cjciuwoi005p.eu-north-1.rds.amazonaws.com',
+    user: 'datasus',
+    password: 'Dubaduba6060',
+    database: 'pharmacysystem',
     waitForConnections: true,
     connectionLimit: 10,
-    queueLimit: 0
+    queueLimit: 0,
+    connectTimeout: 30000 // 30 seconds
 });
 
 
