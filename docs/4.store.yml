@@ -162,3 +162,46 @@ paths:
           description: Store not found
         "500":
           description: Internal server error
+  /stores/top-selling-products/{storeID}:
+    get:
+      tags:
+        - Stores
+      security:
+        - bearerAuth: []
+      summary: Get top-selling products
+      description: Retrieve a list of top-selling products in a specific store.
+      operationId: topSellingProducts
+      parameters:
+        - name: storeID
+          in: path
+          required: true
+          description: The unique ID of the store
+          schema:
+            type: string
+            example: "store123"
+      responses:
+        "200":
+          description: Successfully retrieved top-selling products
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: string
+                      example: "prod123"
+                    name:
+                      type: string
+                      example: "Wireless Headphones"
+                    quantitySold:
+                      type: integer
+                      example: 50
+                    totalRevenue:
+                      type: number
+                      example: 4999.50
+        "404":
+          description: Store not found
+        "500":
+          description: Internal server error

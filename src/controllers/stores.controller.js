@@ -45,7 +45,8 @@ const getStoreInventories = async (req, res, next) => {
 
         const storeID = (req.params.storeID).trim()
 
-        const itemData = storeServices.storeInventories(storeID);
+        const itemData = await storeServices.storeInventories(storeID);
+        console.log(itemData)
 
         const {numberOfProducts, totalItems, items} = itemData
         let responseData;
@@ -114,9 +115,27 @@ const getEmployees = async(req, res, next) => {
 }
 
 
+const topSellingProducts = async(req, res, next) => {
+    try {
+        if(!req.params.storeID.trim()){
+            throw new CustomError(400, 'StoreID is not provided !!');
+        }
+
+        const storeID = (req.params.storeID).trim()
+
+        const data = await storeServices.topSellingProductServices(storeID)
+
+        const response = new SuccessResponse(200, 'success', data);
+        return response.sendResponse(res) 
+    } catch (error) {
+        
+    }
+}
+
 module.exports = {
     fetchAllStores,
     getStoreInventories,
     getOrders,
-    getEmployees
+    getEmployees,
+    topSellingProducts
 }

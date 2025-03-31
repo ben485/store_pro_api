@@ -8,6 +8,7 @@ const totalSale = async (String_Date) => {
         let sumsql = `SELECT COALESCE(SUM(Amount_Due), 0) AS TotalSale FROM bulksales WHERE String_Date = ?`;
         let profitsql = `SELECT COALESCE(SUM(Profit_Earn), 0) AS TotalProfit FROM bulksales WHERE String_Date = ?`;
         let orderSql = `SELECT (id) AS TotalOrders FROM bulksales WHERE String_Date = ?`;
+        const countStaff = `SELECT COUNT(id) AS Total FROM users`
 
         const [[sum]] = await pool.query(sumsql, [String_Date]);  
         const [[profit]] = await pool.query(profitsql, [String_Date]);
@@ -16,7 +17,8 @@ const totalSale = async (String_Date) => {
         const data = {
             totalSale: sum.TotalSale || 0,  
             totalProfit: profit.TotalProfit || 0,
-            totalOrders: orders.TotalOrders || 0
+            totalOrders: orders.TotalOrders || 0,
+            totalStaffs: countStaff.Total || 0
 
         };
 

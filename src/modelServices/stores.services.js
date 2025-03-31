@@ -36,7 +36,7 @@ const storeInventories = async(storeID) => {
        const sumsql =  `SELECT COALESCE(SUM(Quantity), 0) AS TotalItems FROM retaildrugs WHERE Secret_Key = ?`
 
         const [items] = await pool.query(sql, [storeID]);
-        const [[sum]] = await pool.query(sumsql, [Secret_key, String_Date])
+        const [[sum]] = await pool.query(sumsql, [storeID])
 
         return {
             numberOfProducts : items.length || 0,
@@ -113,7 +113,7 @@ const employeeServices = async(storeID) => {
     }
 }
 
-const topSellingProductServices = async(Secret_Key, month) => {
+const topSellingProductServices = async (Secret_Key, month) => {
     try {
         const sqlItems = `
             SELECT 
@@ -133,9 +133,8 @@ const topSellingProductServices = async(Secret_Key, month) => {
             LIMIT 100;
         `;
 
-
         const sqlAmount = `
-               SELECT 
+            SELECT 
                 Drug_name, 
                 Vender_name, 
                 Drug_Type, 
@@ -150,35 +149,46 @@ const topSellingProductServices = async(Secret_Key, month) => {
             GROUP BY Drug_Reff, Vendor_Reff
             ORDER BY total_amount DESC
             LIMIT 100;
-           `
+        `;
 
-           const sqlProfit = `
-           SELECT 
-            Drug_name, 
-            Vender_name, 
-            Drug_Type, 
-            Selling_price, 
-            Profit, 
-            Quantity, 
-            Drug_Reff, 
-            Vendor_Reff, 
-            SUM(Profit) AS total_profit
-        FROM salestable
-        WHERE Secret_Key = ? AND Month = ?
-        GROUP BY Drug_Reff, Vendor_Reff
-        ORDER BY total_profit DESC
-        LIMIT 100;
-       `
+        const sqlProfit = `
+            SELECT 
+                Drug_name, 
+                Vender_name, 
+                Drug_Type, 
+                Selling_price, 
+                Profit, 
+                Quantity, 
+                Drug_Reff, 
+                Vendor_Reff, 
+                SUM(Profit) AS total_profit
+            FROM salestable
+            WHERE Secret_Key = ? AND Month = ?
+            GROUP BY Drug_Reff, Vendor_Reff
+            ORDER BY total_profit DESC
+            LIMIT 100;
+        `;
 
-      const [itemQuantity] = await pool.query(sqlItems, [Secret_Key, ])
+        // Execute queries
+        const [itemQuantity] = await pool.query(sqlItems, [Secret_Key, month]);
+        const [itemAmount] = await pool.query(sqlAmount, [Secret_Key, month]);
+        const [itemProfit] = await pool.query(sqlProfit, [Secret_Key, month]);
+        return {
+            quantityBased: itemQuantity,
+            revenueBased: itemAmount,
+            profitBased: itemProfit
+        };
     } catch (error) {
-        throw error  
+        console.error("Error fetching top selling products:", error);
+        throw error;  
     }
-}
+};
+
 module.exports = {
     getAllStores,
     getStoreSales,
     storeInventories,
     ordersServices,
-    employeeServices
+    employeeServices,
+    topSellingProductServices
 }
