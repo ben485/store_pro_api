@@ -85,6 +85,9 @@ const staffs = async () => {
 
 const overviewService = async (String_Date) => {
     try {
+        let Date_Expiry = new Date().toISOString().split("T")[0]; // Ensure it's in YYYY-MM-DD format
+        let Left_Quantity = 0;
+
         // Define queries
         const sumsql = `SELECT COALESCE(SUM(Amount_Due), 0) AS TotalSale FROM bulksales WHERE String_Date = ?`;
         const profitsql = `SELECT COALESCE(SUM(Profit_Earn), 0) AS TotalProfit FROM bulksales WHERE String_Date = ?`;
@@ -94,6 +97,7 @@ const overviewService = async (String_Date) => {
         const amountSql = `SELECT SUM(Selling_price * Left_Quantity) AS Total FROM retaildrugs WHERE Left_Quantity > ?`;
         const countSql = `SELECT COUNT(id) AS Total FROM retaildrugs WHERE Left_Quantity > ?`;
         const sumSql = `SELECT SUM(Left_Quantity) AS Total FROM retaildrugs WHERE Left_Quantity > ?`;
+        const outOfStockSql = `SELECT COALESCE(SUM(Left_Quantity), 0) AS Total FROM retaildrugs WHERE Left_Quantity < ?`;
 
         // Execute queries concurrently
         const [
@@ -103,7 +107,8 @@ const overviewService = async (String_Date) => {
             [[staffCount]],
             [productCount],
             [totalCount],
-            [amounts]
+            [amounts],
+            [outOfStock],
         ] = await Promise.all([
             pool.query(sumsql, [String_Date]),
             pool.query(profitsql, [String_Date]),
@@ -111,7 +116,8 @@ const overviewService = async (String_Date) => {
             pool.query(countStaffSql),
             pool.query(countSql, [0]),
             pool.query(sumSql, [0]),
-            pool.query(amountSql, [0])
+            pool.query(amountSql, [0]),
+            pool.query(outOfStockSql, [0])
         ]);
 
         // Return formatted data
@@ -122,9 +128,11 @@ const overviewService = async (String_Date) => {
             totalStaffs: staffCount.Total || 0,
             items: productCount[0].Total || 0,
             stockQuantity: totalCount[0].Total || 0,
-            amount: amounts[0].Total || 0
+            amount: amounts[0].Total || 0,
+            outOfStock: outOfStock[0]?.Total || 0,
         };
     } catch (error) {
+        console.error("Error in overviewService:", error);
         throw error;
     }
 };
