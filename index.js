@@ -104,7 +104,7 @@ app.use('/', require('./src/routes/index.route'));
 app.use('/auth', require('./src/routes/auth.route'));
 app.use('/specifics', require('./src/routes/specific.route'));
 app.use('/products', require('./src/routes/product.route'));
-
+app.use('/stores', require('./src/routes/stores.route'));
 
 
 

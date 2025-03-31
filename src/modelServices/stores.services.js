@@ -113,7 +113,7 @@ const employeeServices = async(storeID) => {
     }
 }
 
-const topSellingProductServices = async(req, res, next) => {
+const topSellingProductServices = async(Secret_Key, month) => {
     try {
         const sqlItems = `
             SELECT 
@@ -170,7 +170,7 @@ const topSellingProductServices = async(req, res, next) => {
         LIMIT 100;
        `
 
-
+      const [itemQuantity] = await pool.query(sqlItems, [Secret_Key, ])
     } catch (error) {
         throw error  
     }
