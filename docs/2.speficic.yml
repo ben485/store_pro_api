@@ -18,14 +18,6 @@ paths:
       responses:
         "200":
           description: Successfully retrieved total sales data
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  totalSales:
-                    type: number
-                    example: 25000.50
         "401":
           description: Unauthorized
           content:
@@ -59,46 +51,10 @@ paths:
       responses:
         "200":
           description: Successfully retrieved inventories
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  type: object
-                  properties:
-                    id:
-                      type: string
-                      example: "inv123"
-                    name:
-                      type: string
-                      example: "Laptop"
-                    quantity:
-                      type: integer
-                      example: 50
-                    price:
-                      type: number
-                      example: 1200.99
         "401":
           description: Unauthorized
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  error:
-                    type: string
-                    example: "Unauthorized access"
         "500":
           description: Internal server error
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  error:
-                    type: string
-                    example: "Internal Server Error"
-
   /specifics/staffs:
     get:
       tags:
@@ -111,26 +67,6 @@ paths:
       responses:
         "200":
           description: Successfully retrieved staff members
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  type: object
-                  properties:
-                    id:
-                      type: string
-                      example: "staff123"
-                    name:
-                      type: string
-                      example: "John Doe"
-                    position:
-                      type: string
-                      example: "Manager"
-                    email:
-                      type: string
-                      format: email
-                      example: "johndoe@example.com"
         "401":
           description: Unauthorized
           content:
@@ -154,7 +90,7 @@ paths:
   /specifics/overview:
     get:
       tags:
-        - Overview
+        - Specific Queries
       security:
         - bearerAuth: []
       summary: Get store overview
