@@ -50,7 +50,7 @@ paths:
           description: The unique ID of the store
           schema:
             type: string
-            example: "store123"
+            example: "1743144736918"
       responses:
         "200":
           description: Successfully retrieved store inventory
@@ -94,7 +94,7 @@ paths:
           description: The unique ID of the store
           schema:
             type: string
-            example: "store123"
+            example: "1743144736918"
       responses:
         "200":
           description: Successfully retrieved sale orders
@@ -138,7 +138,7 @@ paths:
           description: The unique ID of the store
           schema:
             type: string
-            example: "store123"
+            example: "1743144736918"
       responses:
         "200":
           description: Successfully retrieved store employees
@@ -178,7 +178,7 @@ paths:
           description: The unique ID of the store
           schema:
             type: string
-            example: "store123"
+            example: "1743144736918"
       responses:
         "200":
           description: Successfully retrieved top-selling products
