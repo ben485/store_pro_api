@@ -205,3 +205,27 @@ paths:
           description: Store not found
         "500":
           description: Internal server error
+  /stores/overview/{storeID}:
+    get:
+      tags:
+        - Overview
+      security:
+        - bearerAuth: []
+      summary: Get store-specific overview
+      description: Retrieve an overview of performance and statistics for a specific store.
+      operationId: getStoreOverview
+      parameters:
+        - name: storeID
+          in: path
+          required: true
+          description: The unique ID of the store
+          schema:
+            type: string
+            example: "1743144736918"
+      responses:
+        "200":
+          description: Successfully retrieved store-specific overview
+        "404":
+          description: Store not found
+        "500":
+          description: Internal server error

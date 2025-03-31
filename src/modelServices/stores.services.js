@@ -187,48 +187,53 @@ const topSellingProductServices = async (Secret_Key, month) => {
 
 const overviewService = async (storeID, String_Date) => {
     try {
-        // Define queries
-        const sumsql = `SELECT COALESCE(SUM(Amount_Due), 0) AS TotalSale FROM bulksales WHERE Secret_Key = ? AND String_Date = ?`;
-        const profitsql = `SELECT COALESCE(SUM(Profit_Earn), 0) AS TotalProfit FROM bulksales WHERE Secret_Key = ? AND String_Date = ?`;
-        const orderSql = `SELECT COUNT(id) AS TotalOrders FROM bulksales WHERE Secret_Key = ? AND String_Date = ?`;
-
-        const countStaffSql = `SELECT COUNT(id) AS Total FROM users WHERE Secret_Key = ?`;
-        const amountSql = `SELECT SUM(Selling_price * Left_Quantity) AS Total FROM retaildrugs WHERE Left_Quantity > ?`;
-        const countSql = `SELECT COUNT(id) AS Total FROM retaildrugs WHERE Left_Quantity > ?`;
-        const sumSql = `SELECT SUM(Left_Quantity) AS Total FROM retaildrugs WHERE Left_Quantity > ?`;
-
-        // Execute queries concurrently
-        const [
-            [[sum]],
-            [[profit]],
-            [[orders]],
-            [[staffCount]],
-            [productCount],
-            [totalCount],
-            [amounts]
-        ] = await Promise.all([
-            pool.query(sumsql, [String_Date]),
-            pool.query(profitsql, [String_Date]),
-            pool.query(orderSql, [String_Date]),
-            pool.query(countStaffSql),
-            pool.query(countSql, [0]),
-            pool.query(sumSql, [0]),
-            pool.query(amountSql, [0])
-        ]);
-
-        // Return formatted data
-        return {
-            totalSale: sum.TotalSale || 0,
-            totalProfit: profit.TotalProfit || 0,
-            totalOrders: orders.TotalOrders || 0,
-            totalStaffs: staffCount.Total || 0,
-            items: productCount[0].Total || 0,
-            stockQuantity: totalCount[0].Total || 0,
-            amount: amounts[0].Total || 0
-        };
-    } catch (error) {
-        throw error;
-    }
+          // Define queries
+          const sumsql = `SELECT COALESCE(SUM(Amount_Due), 0) AS TotalSale FROM bulksales WHERE Secret_Key = ? AND String_Date = ?`;
+          const profitsql = `SELECT COALESCE(SUM(Profit_Earn), 0) AS TotalProfit FROM bulksales  Secret_Key = ? AND String_Date = ?`;
+          const orderSql = `SELECT COUNT(id) AS TotalOrders FROM bulksales WHERE Secret_Key = ? AND String_Date = ?`;
+          const countStaffSql = `SELECT COUNT(id) AS Total FROM users WHERE Secret_Key = ?`;
+  
+          const amountSql = `SELECT SUM(Selling_price * Left_Quantity) AS Total FROM retaildrugs WHERE Secret_Key = ? AND Left_Quantity > ?`;
+          const countSql = `SELECT COUNT(id) AS Total FROM retaildrugs WHERE Secret_Key AND Left_Quantity > ?`;
+          const sumSql = `SELECT SUM(Left_Quantity) AS Total FROM retaildrugs WHERE Secret_Key AND Left_Quantity > ?`;
+          const outOfStockSql = `SELECT COALESCE(SUM(Left_Quantity), 0) AS Total FROM retaildrugs Secret_Key AND WHERE Left_Quantity < ?`;
+  
+          // Execute queries concurrently
+          const [
+              [[sum]],
+              [[profit]],
+              [[orders]],
+              [[staffCount]],
+              [productCount],
+              [totalCount],
+              [amounts],
+              [outOfStock],
+          ] = await Promise.all([
+              pool.query(sumsql, [storeID, String_Date]),
+              pool.query(profitsql, [storeID, String_Date]),
+              pool.query(orderSql, [storeID, String_Date]),
+              pool.query(countStaffSql, [storeID]),
+              pool.query(countSql, [storeID, 0]),
+              pool.query(sumSql, [storeID, 0]),
+              pool.query(amountSql, [storeID, 0]),
+              pool.query(outOfStockSql, [storeID, 0])
+          ]);
+  
+          // Return formatted data
+          return {
+              totalSale: sum.TotalSale || 0,
+              totalProfit: profit.TotalProfit || 0,
+              totalOrders: orders.TotalOrders || 0,
+              totalStaffs: staffCount.Total || 0,
+              items: productCount[0].Total || 0,
+              stockQuantity: totalCount[0].Total || 0,
+              amount: amounts[0].Total || 0,
+              outOfStock: outOfStock[0]?.Total || 0,
+          };
+      } catch (error) {
+          console.error("Error in overviewService:", error);
+          throw error;
+      }
 };
 
 module.exports = {
@@ -237,5 +242,6 @@ module.exports = {
     storeInventories,
     ordersServices,
     employeeServices,
-    topSellingProductServices
+    topSellingProductServices,
+    overviewService
 }

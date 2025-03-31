@@ -12,7 +12,9 @@ router.get('/sale-orders/:storeID', storeController.getOrders)
 
 router.get('/employees/:storeID', storeController.getEmployees);
 
-router.get('/top-selling-products/:storeID', storeController.topSellingProducts)
+router.get('/top-selling-products/:storeID', storeController.topSellingProducts);
+
+router.get('/overview/:storeID', storeController.getOverview);
 
 
 module.exports = router

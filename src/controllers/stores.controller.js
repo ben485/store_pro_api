@@ -128,7 +128,25 @@ const topSellingProducts = async(req, res, next) => {
         const response = new SuccessResponse(200, 'success', data);
         return response.sendResponse(res) 
     } catch (error) {
-        
+        return next(error); 
+    }
+}
+
+
+const getOverview = async(req, res, next) => {
+    try {
+        if(!req.params.storeID.trim()){
+            throw new CustomError(400, 'StoreID is not provided !!');
+        }
+
+        const storeID = (req.params.storeID).trim();
+
+        const data = await storeServices.overviewService(storeID)
+
+        const response = new SuccessResponse(200, 'success', data);
+        return response.sendResponse(res) 
+    } catch (error) {
+        return next(error); 
     }
 }
 
@@ -137,5 +155,6 @@ module.exports = {
     getStoreInventories,
     getOrders,
     getEmployees,
-    topSellingProducts
+    topSellingProducts,
+    getOverview
 }

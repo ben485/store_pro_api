@@ -85,9 +85,6 @@ const staffs = async () => {
 
 const overviewService = async (String_Date) => {
     try {
-        let Date_Expiry = new Date().toISOString().split("T")[0]; // Ensure it's in YYYY-MM-DD format
-        let Left_Quantity = 0;
-
         // Define queries
         const sumsql = `SELECT COALESCE(SUM(Amount_Due), 0) AS TotalSale FROM bulksales WHERE String_Date = ?`;
         const profitsql = `SELECT COALESCE(SUM(Profit_Earn), 0) AS TotalProfit FROM bulksales WHERE String_Date = ?`;
