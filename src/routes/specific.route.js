@@ -10,5 +10,7 @@ router.get('/inventories', specificQueriesController.getInventories);
 
 router.get('/staffs', specificQueriesController.getStaff)
 
+router.get('/overview', specificQueriesController.getOverview)
+
 
 module.exports = router

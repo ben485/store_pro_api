@@ -43,9 +43,23 @@ const getStaff = async(req, res, next) => {
     }
 }
 
+const getOverview = async(req, res, next) => {
+    try {
+        let String_Date = new Date().toLocaleDateString().split(",")[0]; 
+
+        const data = await specificQueriesService.overviewService(String_Date);
+
+        const response = new SuccessResponse(200, 'success', data);
+        return response.sendResponse(res)
+    } catch (error) {
+        next(error) 
+    }
+}
+
 
 module.exports = {
     getTotalSales,
     getInventories,
-    getStaff
+    getStaff,
+    getOverview
 }

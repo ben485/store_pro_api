@@ -151,3 +151,17 @@ paths:
                   error:
                     type: string
                     example: "Internal Server Error"
+  /specifics/overview:
+    get:
+      tags:
+        - Overview
+      security:
+        - bearerAuth: []
+      summary: Get store overview
+      description: Retrieve an overview of store performance and statistics.
+      operationId: getOverview
+      responses:
+        "200":
+          description: Successfully retrieved store overview
+        "500":
+          description: Internal server error

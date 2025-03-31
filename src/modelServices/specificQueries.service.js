@@ -83,8 +83,56 @@ const staffs = async () => {
     }
 }
 
+const overviewService = async (String_Date) => {
+    try {
+        // Define queries
+        const sumsql = `SELECT COALESCE(SUM(Amount_Due), 0) AS TotalSale FROM bulksales WHERE String_Date = ?`;
+        const profitsql = `SELECT COALESCE(SUM(Profit_Earn), 0) AS TotalProfit FROM bulksales WHERE String_Date = ?`;
+        const orderSql = `SELECT COUNT(id) AS TotalOrders FROM bulksales WHERE String_Date = ?`;
+        const countStaffSql = `SELECT COUNT(id) AS Total FROM users`;
+
+        const amountSql = `SELECT SUM(Selling_price * Left_Quantity) AS Total FROM retaildrugs WHERE Left_Quantity > ?`;
+        const countSql = `SELECT COUNT(id) AS Total FROM retaildrugs WHERE Left_Quantity > ?`;
+        const sumSql = `SELECT SUM(Left_Quantity) AS Total FROM retaildrugs WHERE Left_Quantity > ?`;
+
+        // Execute queries concurrently
+        const [
+            [[sum]],
+            [[profit]],
+            [[orders]],
+            [[staffCount]],
+            [productCount],
+            [totalCount],
+            [amounts]
+        ] = await Promise.all([
+            pool.query(sumsql, [String_Date]),
+            pool.query(profitsql, [String_Date]),
+            pool.query(orderSql, [String_Date]),
+            pool.query(countStaffSql),
+            pool.query(countSql, [0]),
+            pool.query(sumSql, [0]),
+            pool.query(amountSql, [0])
+        ]);
+
+        // Return formatted data
+        return {
+            totalSale: sum.TotalSale || 0,
+            totalProfit: profit.TotalProfit || 0,
+            totalOrders: orders.TotalOrders || 0,
+            totalStaffs: staffCount.Total || 0,
+            items: productCount[0].Total || 0,
+            stockQuantity: totalCount[0].Total || 0,
+            amount: amounts[0].Total || 0
+        };
+    } catch (error) {
+        throw error;
+    }
+};
+
+
 module.exports = {
     totalSale,
     inventories,
-    staffs
+    staffs,
+    overviewService
 }
