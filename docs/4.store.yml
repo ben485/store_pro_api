@@ -1,0 +1,164 @@
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+paths:
+  /stores/all:
+    get:
+      tags:
+        - Stores
+      security:
+        - bearerAuth: []
+      summary: Fetch all stores
+      description: Retrieve a list of all available stores.
+      operationId: fetchAllStores
+      responses:
+        "200":
+          description: Successfully retrieved all stores
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: string
+                      example: "store123"
+                    name:
+                      type: string
+                      example: "Main Street Store"
+        "500":
+          description: Internal server error
+
+  /stores/inventory/{storeID}:
+    get:
+      tags:
+        - Stores
+      security:
+        - bearerAuth: []
+      summary: Get store inventory
+      description: Retrieve inventory details for a specific store.
+      operationId: getStoreInventories
+      parameters:
+        - name: storeID
+          in: path
+          required: true
+          description: The unique ID of the store
+          schema:
+            type: string
+            example: "store123"
+      responses:
+        "200":
+          description: Successfully retrieved store inventory
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: string
+                      example: "prod123"
+                    name:
+                      type: string
+                      example: "Laptop"
+                    quantity:
+                      type: integer
+                      example: 15
+                    price:
+                      type: number
+                      example: 999.99
+        "404":
+          description: Store not found
+        "500":
+          description: Internal server error
+
+  /stores/sale-orders/{storeID}:
+    get:
+      tags:
+        - Stores
+      security:
+        - bearerAuth: []
+      summary: Get store sale orders
+      description: Retrieve all sale orders placed in a specific store.
+      operationId: getOrders
+      parameters:
+        - name: storeID
+          in: path
+          required: true
+          description: The unique ID of the store
+          schema:
+            type: string
+            example: "store123"
+      responses:
+        "200":
+          description: Successfully retrieved sale orders
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    orderID:
+                      type: string
+                      example: "order789"
+                    customerName:
+                      type: string
+                      example: "John Doe"
+                    totalAmount:
+                      type: number
+                      example: 250.75
+                    status:
+                      type: string
+                      example: "Completed"
+        "404":
+          description: Store not found
+        "500":
+          description: Internal server error
+
+  /stores/employees/{storeID}:
+    get:
+      tags:
+        - Stores
+      security:
+        - bearerAuth: []
+      summary: Get store employees
+      description: Retrieve a list of employees working at a specific store.
+      operationId: getEmployees
+      parameters:
+        - name: storeID
+          in: path
+          required: true
+          description: The unique ID of the store
+          schema:
+            type: string
+            example: "store123"
+      responses:
+        "200":
+          description: Successfully retrieved store employees
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    employeeID:
+                      type: string
+                      example: "emp456"
+                    name:
+                      type: string
+                      example: "Alice Johnson"
+                    role:
+                      type: string
+                      example: "Cashier"
+        "404":
+          description: Store not found
+        "500":
+          description: Internal server error
