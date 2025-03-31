@@ -139,9 +139,10 @@ const getOverview = async(req, res, next) => {
             throw new CustomError(400, 'StoreID is not provided !!');
         }
 
+        let String_Date = new Date().toLocaleDateString().split(",")[0];
         const storeID = (req.params.storeID).trim();
 
-        const data = await storeServices.overviewService(storeID)
+        const data = await storeServices.overviewService(storeID, String_Date)
 
         const response = new SuccessResponse(200, 'success', data);
         return response.sendResponse(res) 

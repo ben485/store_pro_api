@@ -189,14 +189,14 @@ const overviewService = async (storeID, String_Date) => {
     try {
           // Define queries
           const sumsql = `SELECT COALESCE(SUM(Amount_Due), 0) AS TotalSale FROM bulksales WHERE Secret_Key = ? AND String_Date = ?`;
-          const profitsql = `SELECT COALESCE(SUM(Profit_Earn), 0) AS TotalProfit FROM bulksales  Secret_Key = ? AND String_Date = ?`;
+          const profitsql = `SELECT COALESCE(SUM(Profit_Earn), 0) AS TotalProfit FROM bulksales WHERE Secret_Key = ? AND String_Date = ?`
           const orderSql = `SELECT COUNT(id) AS TotalOrders FROM bulksales WHERE Secret_Key = ? AND String_Date = ?`;
           const countStaffSql = `SELECT COUNT(id) AS Total FROM users WHERE Secret_Key = ?`;
   
           const amountSql = `SELECT SUM(Selling_price * Left_Quantity) AS Total FROM retaildrugs WHERE Secret_Key = ? AND Left_Quantity > ?`;
           const countSql = `SELECT COUNT(id) AS Total FROM retaildrugs WHERE Secret_Key AND Left_Quantity > ?`;
-          const sumSql = `SELECT SUM(Left_Quantity) AS Total FROM retaildrugs WHERE Secret_Key AND Left_Quantity > ?`;
-          const outOfStockSql = `SELECT COALESCE(SUM(Left_Quantity), 0) AS Total FROM retaildrugs Secret_Key AND WHERE Left_Quantity < ?`;
+          const sumSql = `SELECT SUM(Left_Quantity) AS Total FROM retaildrugs WHERE Secret_Key = ? AND Left_Quantity > ?`;
+          const outOfStockSql = `SELECT COALESCE(SUM(Left_Quantity), 0) AS Total FROM retaildrugs WHERE Secret_Key = ? AND Left_Quantity < ?`;
   
           // Execute queries concurrently
           const [
