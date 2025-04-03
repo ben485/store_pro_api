@@ -86,7 +86,8 @@ const ordersServices = async(storeID, String_Date) => {
 
         return data
     } catch (error) {
-        
+        console.error("Error fetching top selling products:", error);
+        throw error;  
     }
 }
 

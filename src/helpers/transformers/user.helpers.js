@@ -4,7 +4,7 @@ const sanitizeStaffData = (storeData, token) => {
 
     return {
         store: storeData.Pharmacy_name || '',
-        email: storeData.email || '',
+        email: storeData.userEmail || '',
         physicalAddress: storeData.physicalAddress || '',
         printer: storeData.printer || '',
         telephone: storeData.Telephone || '',

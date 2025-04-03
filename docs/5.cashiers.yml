@@ -1,0 +1,46 @@
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+paths:
+  /cashiers/all:
+    get:
+      tags:
+        - Cashiers
+      security:
+        - bearerAuth: []
+      summary: Fetch all cashiers
+      description: Retrieve a list of all available cashiers.
+      operationId: fetchAllCashiers
+      responses:
+        "200":
+          description: Successfully retrieved all cashiers
+        "500":
+          description: Internal server error
+
+  /cashiers/sales/{userEmail}:
+    get:
+      tags:
+        - Cashiers
+      security:
+        - bearerAuth: []
+      summary: Get sale history
+      description: Retrieve the sales history for a specific store.
+      operationId: getSaleHistory
+      parameters:
+        - name: userEmail
+          in: path
+          required: true
+          description: The unique email of the store
+          schema:
+            type: string
+            example: "benandoh1996@gmail.com"
+      responses:
+        "200":
+          description: Successfully retrieved sale history
+        "404":
+          description: Store not found
+        "500":
+          description: Internal server error
