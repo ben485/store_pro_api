@@ -20,7 +20,7 @@ const fetchAllCashiers = async (req, res, next) => {
         // Fetch store sales concurrently
         const userLists = await Promise.all(
             users.map(async (data) => {
-                const cashierSale = await cashierController.overview(storeID, email, String_Date);
+                const cashierSale = await cashierController.overview(storeID, data.email, String_Date);
                 return {
                     cashierName: data.name,
                     store: data.store,
@@ -44,7 +44,7 @@ const getSaleHistory = async(req, res, next) => {
         const storeID = validatorFunction.getStoreID(req)
 
         if(!req.params.userEmail.trim()){
-            throw new CustomError(400, 'StoreID is not provided !!');
+            throw new CustomError(400, 'userEmail is not provided !!');
         }
 
         const userEmail = (req.params.userEmail).trim()

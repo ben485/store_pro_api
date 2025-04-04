@@ -1,7 +1,7 @@
 
 const validator = require('validator')
 
-const CustomError = require('../classUtil/customErrorClass'); 
+const CustomError = require('../../classUtils/customErrorClass'); 
 
 const validateOrganizationID = (organizationID) => {
 
@@ -48,11 +48,12 @@ const validateQueryString = (string) => {
 
 
 const getStoreID = (req) => {
-  if (!req || !req.user || !req.user.data|| !req.user.data.storeID){
+  console.log(req.user)
+  if (!req || !req.user || !req.user.data|| !req.user.data.secret_Key){
     throw new CustomError(400, 'Bad request, Loggedin user data cannot be extracted. Login neeeded');
   }
 
-  return (req.user.data.storeID).trim()
+  return (req.user.data.secret_Key).trim()
 }
 
 

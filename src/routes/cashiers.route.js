@@ -4,9 +4,9 @@ const router = express.Router();
 
 const cashierController = require('../controllers/cashier.controller')
 
-router.get('/all', cashierController.fetchAllCashiers);
+router.get('/all/:storeID', cashierController.fetchAllCashiers);
 
-router.get('/sales/:storeID', cashierController.getSaleHistory);
+router.get('/sales/:userEmail', cashierController.getSaleHistory);
 
 
 

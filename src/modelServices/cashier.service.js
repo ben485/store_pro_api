@@ -7,7 +7,7 @@ const salesFunction = require('../helpers/transformers/sale.helper')
 
 const allCashiersService = async(storeID) => {
     try {
-        const cashierSql = `SELECT * users WHERE Secret_Key = ?`
+        const cashierSql = `SELECT * FROM users WHERE Secret_Key = ?`
 
         const [users] = await pool.query(cashierSql, [storeID])
 
@@ -19,7 +19,7 @@ const allCashiersService = async(storeID) => {
             staffs = users.map(data => helperFunction.sanitizeProfileData(data));
         }
 
-        return users
+        return staffs
     } catch (error) {
         console.error("Error fetching top selling products:", error);
         throw error;   
@@ -40,11 +40,17 @@ const overview = async (storeID, userEmail, String_Date) => {
             WHERE Secret_Key = ? AND userEmail = ? AND String_Date = ?
         `;
 
-        const [results] = await pool.query(query, [storeID, userEmail, String_Date]);
+        const [[results]] = await pool.query(query, [storeID, userEmail, String_Date]);
 
         console.log(results)
 
-        return results
+        return {
+            totalSale: results.Total || 0,
+            cashTotal: results.Cash_Total || 0,
+            creditTotal: results.Credit_Total || 0,
+            momoTotal: results.Momo_Total || 0,
+            totalOrders: results.Total_Orders || 0
+        }
 
     } catch (error) {
         console.error("Error fetching overview:", error);
