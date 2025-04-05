@@ -42,8 +42,6 @@ const overview = async (storeID, userEmail, String_Date) => {
 
         const [[results]] = await pool.query(query, [storeID, userEmail, String_Date]);
 
-        console.log(results)
-
         return {
             totalSale: results.Total || 0,
             cashTotal: results.Cash_Total || 0,
@@ -63,16 +61,29 @@ const overview = async (storeID, userEmail, String_Date) => {
 
 const fetchSales = async(storeID, userEmail, String_Date) => {
   try {
-    const orderSql = `SELECT * FROM bulksales Secret_Key = ? AND userEmail = ? AND String_Date = ?`
+    let query = `
+    SELECT 
+        SUM(Amount_Due) AS Total, 
+        SUM(CASE WHEN Payment_Platform = 'Cash' THEN Amount_Due ELSE 0 END) AS Cash_Total,
+        SUM(CASE WHEN Payment_Platform = 'Credit' THEN Amount_Due ELSE 0 END) AS Credit_Total,
+        SUM(CASE WHEN Payment_Platform = 'Momo' THEN Amount_Due ELSE 0 END) AS Momo_Total,
+        COUNT(id) AS Total_Orders
+    FROM bulksales 
+    WHERE Secret_Key = ? AND userEmail = ? AND String_Date = ?
+   `;
 
-    const saleSql = `SELECT * FROM salestable Secret_Key = ? AND userEmail = ? AND String_Date = ?`
+    const orderSql = `SELECT * FROM bulksales WHERE Secret_Key = ? AND userEmail = ? AND String_Date = ?`
+
+    const saleSql = `SELECT * FROM salestable WHERE Secret_Key = ? AND userEmail = ? AND String_Date = ?`
 
     let transformedSales;
     let transformedOrders;
 
     const [sales] = await pool.query(saleSql, [storeID, userEmail, String_Date]);
 
-    const [orders] = await pool.query(orderSql, [storeID, userEmail, String_Date])
+    const [orders] = await pool.query(orderSql, [storeID, userEmail, String_Date]);
+
+    const [[results]] = await pool.query(query, [storeID, userEmail, String_Date]);
 
     if(sales.length === 0){
         transformedSales = []
@@ -88,8 +99,17 @@ const fetchSales = async(storeID, userEmail, String_Date) => {
 
     const data = {
         orders: transformedOrders,
-        saleHistory: transformedSales
+        saleHistory: transformedSales,
+        saleData: {
+            totalSale: results.Total || 0,
+            cashTotal: results.Cash_Total || 0,
+            creditTotal: results.Credit_Total || 0,
+            momoTotal: results.Momo_Total || 0,
+            totalOrders: results.Total_Orders || 0
+        }
     }
+
+    return data
 
   } catch (error) {
     console.error("Error fetching overview:", error);
