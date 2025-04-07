@@ -57,8 +57,6 @@ const overview = async (storeID, userEmail, String_Date) => {
 };
 
 
-
-
 const fetchSales = async(storeID, userEmail, String_Date) => {
   try {
     let query = `

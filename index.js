@@ -106,7 +106,7 @@ app.use('/specifics', require('./src/routes/specific.route'));
 app.use('/products', require('./src/routes/product.route'));
 app.use('/stores', require('./src/routes/stores.route'));
 app.use('/cashiers', require('./src/routes/cashiers.route'));
-
+app.use('/reports', require('./src/routes/report.route'));
 
 /////Express Error Handler
 app.use(error.errorHandler);

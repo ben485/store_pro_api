@@ -67,6 +67,6 @@ const getSaleHistory = async(req, res, next) => {
 
 module.exports = {
     fetchAllCashiers,
-    getSaleHistory
+    getSaleHistory,
 
 }
